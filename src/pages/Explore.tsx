@@ -13,10 +13,15 @@ export default function Explore() {
   const [sortBy, setSortBy] = useState<'id' | 'author'>('id')
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid')
 
-  const { toggle, isFav } = useFavs()
-  const token = useAuth(s => s.token)
+  const { toggle, isFav, setUser } = useFavs()
+  const { token, user } = useAuth()
   const nav = useNavigate()
   const loc = useLocation()
+
+  // Ustaw użytkownika w store ulubionych przy zmianie użytkownika
+  useEffect(() => {
+    setUser(user?.username || null)
+  }, [user?.username, setUser])
 
   useEffect(() => {
     (async () => {
@@ -46,11 +51,11 @@ export default function Explore() {
   }
 
   function onToggle(q: Quote) {
-    if (!token) {
+    if (!token || !user) {
       nav('/login', { state: { from: loc } })
       return
     }
-    toggle(q)
+    toggle(q, user.username)
   }
 
   const favLabel = (id: number) =>

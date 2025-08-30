@@ -1,13 +1,18 @@
-import { useMemo, useState } from 'react'
+import { useMemo, useState, useEffect } from 'react'
 import { useFavs } from '../store/favs'
 import { useAuth } from '../store/auth'
 
 export default function Favorites() {
-  const { favs, toggle } = useFavs()
-  const user = useAuth(s => s.user)
+  const { favs, toggle, setUser } = useFavs()
+  const { user } = useAuth()
   const [sortBy, setSortBy] = useState<'added' | 'author' | 'length'>('added')
   const [searchQuery, setSearchQuery] = useState('')
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid')
+
+  // Ustaw użytkownika w store ulubionych przy zmianie użytkownika
+  useEffect(() => {
+    setUser(user?.username || null)
+  }, [user?.username, setUser])
 
   const items = useMemo(() => {
     let result = Object.values(favs)
@@ -66,11 +71,17 @@ export default function Favorites() {
     const url = URL.createObjectURL(blob)
     const a = document.createElement('a')
     a.href = url
-    a.download = `ulubione-cytaty-${new Date().toISOString().split('T')[0]}.json`
+    a.download = `ulubione-cytaty-${user?.username || 'user'}-${new Date().toISOString().split('T')[0]}.json`
     document.body.appendChild(a)
     a.click()
     document.body.removeChild(a)
     URL.revokeObjectURL(url)
+  }
+
+  function handleToggle(q: any) {
+    if (user?.username) {
+      toggle(q, user.username)
+    }
   }
 
   if (items.length === 0 && !searchQuery) {
@@ -240,7 +251,7 @@ export default function Favorites() {
                 transition: 'all 0.3s ease',
                 fontSize: '14px'
               }}
-                onClick={() => toggle(q)}
+                onClick={() => handleToggle(q)}
                 title="Usuń z ulubionych"
                 onMouseOver={(e) => {
                   e.currentTarget.style.background = 'rgba(239, 68, 68, 0.2)'
