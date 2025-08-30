@@ -1,11 +1,20 @@
 import { useEffect, useMemo, useState } from 'react'
-import { fetchAllQuotes, type Quote } from '../api/dummyjson'
+import { fetchQuoteForDay, type Quote } from '../api/dummyjson'
 
 export default function Home() {
-  const [quotes, setQuotes] = useState<Quote[] | null>(null)
+  // Prime UI instantly from cache to improve LCP
+  const [cachedQuote] = useState<Quote | null>(() => {
+    try {
+      const cached = localStorage.getItem('lastQuote')
+      return cached ? (JSON.parse(cached) as Quote) : null
+    } catch {
+      return null
+    }
+  })
+  const [quote, setQuote] = useState<Quote | null>(cachedQuote)
   const [error, setError] = useState<string | null>(null)
   const [font, setFont] = useState<number>(() => Number(localStorage.getItem('fontSize') ?? 20))
-  const [isLoading, setIsLoading] = useState(true)
+  const [isLoading, setIsLoading] = useState(() => (!cachedQuote))
   const [copied, setCopied] = useState(false)
 
   const dayIndex = useMemo(() => {
@@ -17,27 +26,29 @@ export default function Home() {
   }, [])
 
   useEffect(() => {
-    (async () => {
+    // Refresh quote in background; render cached immediately
+    let cancelled = false
+    ;(async () => {
       try {
-        setIsLoading(true)
-        const data = await fetchAllQuotes()
-        setQuotes(data.quotes)
-        localStorage.setItem('lastQuotes', JSON.stringify(data.quotes))
+        const q = await fetchQuoteForDay(dayIndex)
+        if (!cancelled) {
+          setQuote(q)
+          localStorage.setItem('lastQuote', JSON.stringify(q))
+          setIsLoading(false)
+        }
       } catch {
-        const cached = localStorage.getItem('lastQuotes')
-        if (cached) setQuotes(JSON.parse(cached))
-        else setError('Brak danych offline – uruchom raz z Internetem.')
-      } finally {
-        setIsLoading(false)
+        if (!cancelled) {
+          if (!cachedQuote) setError('Brak danych offline – uruchom raz z Internetem.')
+          setIsLoading(false)
+        }
       }
     })()
-  }, [])
+    return () => {
+      cancelled = true
+    }
+  }, [dayIndex, cachedQuote])
 
-  const quote = useMemo(() => {
-    if (!quotes || quotes.length === 0) return null
-    const idx = (dayIndex - 1) % quotes.length
-    return quotes[idx]
-  }, [quotes, dayIndex])
+  useMemo(() => dayIndex, [dayIndex])
 
   function speak(q: Quote) {
     if ('speechSynthesis' in window) {
