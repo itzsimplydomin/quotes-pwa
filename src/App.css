@@ -162,7 +162,7 @@ nav a.active::before {
 .row {
   display: grid;
   gap: 16px;
-  align-items: start;
+  align-items: stretch;
 }
 
 /* Responsive grid */

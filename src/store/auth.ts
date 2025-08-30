@@ -1,5 +1,6 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
+import { useFavs } from './favs'
 
 type User = {
   username: string
@@ -20,8 +21,39 @@ export const useAuth = create<AuthState>()(persist(
   (set) => ({
     token: null,
     user: null,
-    setAuth: (token, user) => set({ token, user }),
-    logout: () => set({ token: null, user: null })
+    setAuth: (token, user) => {
+      // Ustaw auth i powiąż ulubione z użytkownikiem
+      set({ token, user })
+      try {
+        useFavs.getState().setUser(user.username)
+      } catch {
+        // ignore
+      }
+    },
+    logout: () => {
+      // Wyczyść auth i odłącz ulubione od użytkownika
+      set({ token: null, user: null })
+      try {
+        useFavs.getState().setUser(null)
+      } catch {
+        // ignore
+      }
+    }
   }),
-  { name: 'auth' }
+  {
+    name: 'auth',
+    // Po rehydratacji auth ustaw ulubione per użytkownik
+    onRehydrateStorage: () => (state) => {
+      try {
+        const u = state?.user
+        if (u?.username) {
+          useFavs.getState().setUser(u.username)
+        } else {
+          useFavs.getState().setUser(null)
+        }
+      } catch {
+        // ignore
+      }
+    }
+  }
 ))
