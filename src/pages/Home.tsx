@@ -41,6 +41,17 @@ export default function Home() {
     } else alert('API mowy nie jest wspierane.')
   }
 
+  async function share(q: Quote) {
+    const text = `"${q.quote}" — ${q.author}`
+    if (navigator.share) {
+      try { await navigator.share({ title: 'Cytat dnia', text }) }
+      catch { /* użytkownik anulował – nic nie rób */ }
+    } else {
+      await navigator.clipboard.writeText(text)
+      alert('Skopiowano cytat do schowka.')
+    }
+  }
+
   return (
     <div className="card">
       <h2>Dzisiejszy cytat</h2>
@@ -52,6 +63,7 @@ export default function Home() {
           <div className="row">
             <button onClick={() => navigator.clipboard.writeText(`"${quote.quote}" — ${quote.author}`)}>Kopiuj</button>
             <button onClick={() => speak(quote)}>Przeczytaj na głos</button>
+            <button onClick={() => share(quote)}>Udostępnij</button>
             <label className="small">Wielkość czcionki
               <input type="range" min={16} max={32} value={font}
                 onChange={(e) => { const v = Number(e.target.value); setFont(v); localStorage.setItem('fontSize', String(v)) }} />

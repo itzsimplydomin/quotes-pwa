@@ -26,10 +26,7 @@ export default function Explore() {
   }
 
   const filtered = useMemo(() =>
-    all.filter(q =>
-      q.quote.toLowerCase().includes(query.toLowerCase()) ||
-      q.author.toLowerCase().includes(query.toLowerCase())
-    ), [all, query])
+    all.filter(q => q.quote.toLowerCase().includes(query.toLowerCase()) || q.author.toLowerCase().includes(query.toLowerCase())), [all, query])
 
   return (
     <div className="card">

@@ -6,6 +6,8 @@ import Login from './pages/Login'
 import Profile from './pages/Profile'
 import Protected from './components/Protected'
 import UpdatePrompt from './pwa/UpdatePrompt'
+import NotFound from './pages/NotFound'
+import OfflineBanner from './components/OfflineBanner'
 
 export default function App() {
   return (
@@ -17,6 +19,8 @@ export default function App() {
         <div style={{ flex: 1 }} />
         <NavLink to="/profile">Profil</NavLink>
       </nav>
+
+      <OfflineBanner />
 
       <div className="container">
         <Routes>
@@ -39,11 +43,13 @@ export default function App() {
               </Protected>
             }
           />
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </div>
 
-      {/* Baner aktualizacji PWA */}
-      <UpdatePrompt />
-    </>
+        {/* Baner aktualizacji PWA */}
+        <UpdatePrompt /></>
+
+
   )
 }

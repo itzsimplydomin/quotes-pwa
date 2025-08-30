@@ -4,7 +4,6 @@ export default function UpdatePrompt() {
   const { needRefresh, updateServiceWorker, offlineReady } = useRegisterSW()
 
   if (offlineReady?.value) {
-    // możesz pokazać toast „Gotowe offline”
   }
   if (!needRefresh?.value) return null
 
