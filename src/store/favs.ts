@@ -1,3 +1,5 @@
+// Store ulubionych (Zustand) - per-użytkownik, zapisywany w localStorage
+// Ten store sam nie persistuje stanu - zarządzamy zapisem ręcznie (klucze favorites-<user>)
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 import type { Quote } from '../api/dummyjson'

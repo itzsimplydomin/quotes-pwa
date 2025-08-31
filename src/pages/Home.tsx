@@ -1,8 +1,10 @@
+// Strona główna - „Cytat dnia”
+// Natychmiast pokazuje cache, a w tle odświeża dane.
 import { useEffect, useMemo, useState } from 'react'
 import { fetchQuoteForDay, type Quote } from '../api/dummyjson'
 
 export default function Home() {
-  // Prime UI instantly from cache to improve LCP
+  // Natychmiastowe zasilenie UI z cache
   const [cachedQuote] = useState<Quote | null>(() => {
     try {
       const cached = localStorage.getItem('lastQuote')
@@ -17,6 +19,7 @@ export default function Home() {
   const [isLoading, setIsLoading] = useState(() => (!cachedQuote))
   const [copied, setCopied] = useState(false)
 
+  // Indeks dnia w roku - pozwala deterministycznie wybrać cytat
   const dayIndex = useMemo(() => {
     const today = new Date()
     const start = new Date(today.getFullYear(), 0, 0)
@@ -26,7 +29,7 @@ export default function Home() {
   }, [])
 
   useEffect(() => {
-    // Refresh quote in background; render cached immediately
+    // Odśwież cytat w tle, natychmiast renderuj z cache
     let cancelled = false
     ;(async () => {
       try {
@@ -50,6 +53,7 @@ export default function Home() {
 
   useMemo(() => dayIndex, [dayIndex])
 
+  // Prosta synteza mowy jako dodatek – czyta cytat i autora
   function speak(q: Quote) {
     if ('speechSynthesis' in window) {
       const u = new SpeechSynthesisUtterance(`${q.quote} — ${q.author}`)
@@ -60,6 +64,7 @@ export default function Home() {
     }
   }
 
+  // Kopiowanie do schowka z fallbackiem dla starszych przeglądarek
   async function copyToClipboard(q: Quote) {
     const text = `"${q.quote}" — ${q.author}`
     try {
@@ -79,6 +84,7 @@ export default function Home() {
     }
   }
 
+  // Udostępnianie - Web Share API, a w razie braku: schowek
   async function share(q: Quote) {
     const text = `"${q.quote}" — ${q.author}`
     if (navigator.share) {

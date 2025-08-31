@@ -1,9 +1,11 @@
+// Główny komponent aplikacji - nawigacja, trasy i fallbacki ładowania
 import { NavLink, Route, Routes } from 'react-router-dom'
 import { lazy, Suspense, memo } from 'react'
 import UpdatePrompt from './pwa/UpdatePrompt'
 import OfflineBanner from './components/OfflineBanner'
 
 // Lazy loading komponentów dla lepszego code splitting
+// Lazy loading stron - przeglądarka dociąga kod tylko wtedy, gdy jest potrzebny
 const Home = lazy(() => import('./pages/Home'))
 const Explore = lazy(() => import('./pages/Explore'))
 const Favorites = lazy(() => import('./pages/Favorites'))
@@ -13,6 +15,7 @@ const Protected = lazy(() => import('./components/Protected'))
 const NotFound = lazy(() => import('./pages/NotFound'))
 
 // Spinner component dla loading states
+// Prosty spinner dla stanów ładowania, memo żeby nie renderować niepotrzebnie
 const LoadingSpinner = memo(() => (
   <div className="card fade-in">
     <div style={{ textAlign: 'center', padding: '40px 0' }}>
@@ -32,6 +35,7 @@ const LoadingSpinner = memo(() => (
 LoadingSpinner.displayName = 'LoadingSpinner'
 
 // Navigation component - memoized dla lepszej wydajności
+// Nawigacja u góry - linki, aktywny stan i prosta responsywność
 const Navigation = memo(() => (
   <nav>
     <NavLink to="/" end>Dzisiejszy cytat</NavLink>
@@ -46,11 +50,14 @@ Navigation.displayName = 'Navigation'
 export default function App() {
   return (
     <>
+      {/* Pasek nawigacji dostępny na każdej stronie */}
       <Navigation />
       
+      {/* Pasek informujący o pracy w trybie offline */}
       <OfflineBanner />
 
       <div className="container">
+        {/* Suspense łapie leniwie ładowane strony i pokazuje spinner */}
         <Suspense fallback={<LoadingSpinner />}>
           <Routes>
             <Route path="/" element={<Home />} />
@@ -59,6 +66,8 @@ export default function App() {
               path="/favorites"
               element={
                 <Suspense fallback={<LoadingSpinner />}>
+                  {/* Tę trasę zobaczy tylko zalogowany użytkownik */}
+                  {/* Strona profilu jest również za bramką autoryzacyjną */}
                   <Protected>
                     <Favorites />
                   </Protected>
@@ -81,6 +90,7 @@ export default function App() {
         </Suspense>
       </div>
 
+      {/* Komunikat o dostępnej aktualizacji PWA */}
       <UpdatePrompt />
     </>
   )

@@ -1,3 +1,5 @@
+// Plik konfiguracyjny Vite dla aplikacji React w trybie PWA
+// Tutaj ustawiamy wtyczki, manifest oraz strategie cache
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import { VitePWA } from 'vite-plugin-pwa'
@@ -5,7 +7,9 @@ import { VitePWA } from 'vite-plugin-pwa'
 export default defineConfig({
   plugins: [
     react(),
+    // Wtyczka odpowiedzialna za manifest PWA i service workera
     VitePWA({
+      // Automatyczne aktualizacje SW - użytkownik dostaje nowe wersje w tle
       registerType: 'autoUpdate',
       includeAssets: ['icons/icon-192.png', 'icons/icon-512.png'],
       manifest: {
@@ -20,6 +24,7 @@ export default defineConfig({
           { src: 'icons/icon-512.png', sizes: '512x512', type: 'image/png' }
         ]
       },
+      // Konfiguracja Workbox - kontrola cache i strategii dla ruchu sieciowego
       workbox: {
         navigateFallback: '/index.html',
         clientsClaim: true,
@@ -28,6 +33,7 @@ export default defineConfig({
         
         runtimeCaching: [
           {
+            // Cytaty: szybka odpowiedź z cache, a w tle odświeżenie
             urlPattern: /^https:\/\/dummyjson\.com\/quotes.*$/i,
             handler: 'StaleWhileRevalidate',
             options: {
@@ -39,6 +45,7 @@ export default defineConfig({
             }
           },
           {
+            // Autoryzacja: preferuj sieć, ale pozwól działać offline z cache
             urlPattern: /^https:\/\/dummyjson\.com\/auth.*$/i,
             handler: 'NetworkFirst',
             options: {
@@ -55,7 +62,7 @@ export default defineConfig({
   ],
   
   build: {
-    // Code splitting
+    // Podział paczek na mniejsze „chunki” dla szybszego ładowania
     rollupOptions: {
       output: {
         manualChunks: {
@@ -66,7 +73,7 @@ export default defineConfig({
       }
     },
     
-    // Minifikacja
+    // Minifikacja i usuwanie zbędnych logów w produkcji
     minify: 'terser',
     terserOptions: {
       compress: {
@@ -75,7 +82,7 @@ export default defineConfig({
       }
     },
     
-    // Brak source maps w produkcji
+    // W produkcji nie generujemy source maps - mniejszy rozmiar paczki
     sourcemap: false
   }
 })

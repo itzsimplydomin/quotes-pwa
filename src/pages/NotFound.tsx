@@ -1,3 +1,4 @@
+// Prosty ekran 404 - z szybkimi linkami powrotu
 export default function NotFound() {
     return (
         <div className="card fade-in" style={{ textAlign: 'center', maxWidth: '500px', margin: '0 auto' }}>

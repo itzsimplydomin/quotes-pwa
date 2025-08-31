@@ -1,3 +1,4 @@
+// Podpowiedź aktualizacji PWA - pokazuje banner, gdy dostępna jest nowa wersja SW
 import { useRegisterSW } from 'virtual:pwa-register/react'
 import { useState } from 'react'
 
@@ -16,9 +17,10 @@ export default function UpdatePrompt() {
   }
 
   if (offlineReady?.[0]) {
-    // Optionally show a brief "ready for offline use" message
+    // Opcjonalnie: krótki komunikat „gotowe do użycia offline”
   }
 
+  // Brak aktualizacji - nie pokazuj bannera
   if (!needRefresh?.[0]) return null
 
   return (
@@ -99,7 +101,6 @@ export default function UpdatePrompt() {
 
             <button
               onClick={() => {
-                // Hide the prompt temporarily (it will show again on next visit)
                 const event = new CustomEvent('sw-update-dismissed')
                 window.dispatchEvent(event)
               }}

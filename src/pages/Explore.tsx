@@ -1,3 +1,4 @@
+// Odkrywaj - przeglądanie, filtrowanie i losowanie cytatów, z ulubionymi na koncie
 import { useEffect, useMemo, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { fetchAllQuotes, fetchRandomQuote, type Quote } from '../api/dummyjson'
@@ -19,12 +20,14 @@ export default function Explore() {
   const loc = useLocation()
 
   // Ustaw użytkownika w store ulubionych przy zmianie użytkownika
+  // Przełącz ulubione na zalogowanego użytkownika (per-user cache)
   useEffect(() => {
     setUser(user?.username || null)
   }, [user?.username, setUser])
 
   useEffect(() => {
     (async () => {
+      // Pobierz pełną listę i zapisz w cache na offline
       try {
         setIsLoading(true)
         const res = await fetchAllQuotes()
@@ -39,6 +42,7 @@ export default function Explore() {
     })()
   }, [])
 
+  // Losowanie cytatu - preferuj endpoint, fallback do lokalnej listy
   async function randomize() {
     setIsRandomizing(true)
     try {
@@ -50,6 +54,7 @@ export default function Explore() {
     }
   }
 
+  // Dodaj/usuń z ulubionych - brak sesji przekieruje do logowania
   function onToggle(q: Quote) {
     if (!token || !user) {
       nav('/login', { state: { from: loc } })
@@ -61,6 +66,7 @@ export default function Explore() {
   const favLabel = (id: number) =>
     token ? (isFav(id) ? '❤️ Usuń z ulubionych' : '🤍 Dodaj do ulubionych') : '🔐 Zaloguj się'
 
+  // Filtruj i sortuj w pamięci
   const filtered = useMemo(() => {
     let result = all.filter(q =>
       q.quote.toLowerCase().includes(query.toLowerCase()) ||

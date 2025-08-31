@@ -1,3 +1,4 @@
+// Ulubione - widok zapisanych cytatów z prostym sortowaniem, wyszukiwaniem i eksportem
 import { useMemo, useState, useEffect } from 'react'
 import { useFavs } from '../store/favs'
 import { useAuth } from '../store/auth'
@@ -10,14 +11,15 @@ export default function Favorites() {
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid')
 
   // Ustaw użytkownika w store ulubionych przy zmianie użytkownika
+  // Pilnuj, aby store ulubionych działał per zalogowany użytkownik
   useEffect(() => {
     setUser(user?.username || null)
   }, [user?.username, setUser])
 
+  // Przygotuj listę (filtrowanie i sortowanie) bez zbędnych renderów
   const items = useMemo(() => {
     let result = Object.values(favs)
 
-    // Filter by search query
     if (searchQuery) {
       result = result.filter(q =>
         q.quote.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -25,7 +27,6 @@ export default function Favorites() {
       )
     }
 
-    // Sort
     return result.sort((a, b) => {
       switch (sortBy) {
         case 'author':
@@ -34,7 +35,7 @@ export default function Favorites() {
           return a.quote.length - b.quote.length
         case 'added':
         default:
-          return b.id - a.id // Newer first
+          return b.id - a.id
       }
     })
   }, [favs, sortBy, searchQuery])
@@ -60,6 +61,7 @@ export default function Favorites() {
     }
   }
 
+  // Eksport ulubionych do pliku JSON
   async function exportFavorites() {
     const data = {
       user: user?.username || 'anonymous',
@@ -84,6 +86,7 @@ export default function Favorites() {
     }
   }
 
+  // Pusty stan - zachęta do przejścia do „Odkrywaj”
   if (items.length === 0 && !searchQuery) {
     return (
       <div className="card fade-in">

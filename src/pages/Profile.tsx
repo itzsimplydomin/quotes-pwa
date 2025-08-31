@@ -1,3 +1,4 @@
+// Strona profilu - informacje o użytkowniku, statystyki i eksport danych
 import { useAuth } from '../store/auth'
 import { useFavs } from '../store/favs'
 import { useNavigate } from 'react-router-dom'
@@ -8,6 +9,7 @@ export default function Profile() {
   const favs = useFavs(s => s.favs)
   const nav = useNavigate()
 
+  // Zliczamy kilka prostych statystyk na podstawie ulubionych cytatów
   const stats = useMemo(() => {
     const favorites = Object.values(favs)
     const authors = new Set(favorites.map(q => q.author))
@@ -23,11 +25,13 @@ export default function Profile() {
 
   if (!user) return null
 
+  // Wylogowanie i przekierowanie na stronę główną
   const handleLogout = () => {
     logout()
     nav('/')
   }
 
+  // Eksport danych użytkownika i ulubionych do pliku JSON (lokalnie)
   const handleExportData = () => {
     const data = {
       user,
@@ -49,7 +53,7 @@ export default function Profile() {
 
   return (
     <div className="fade-in" style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
-      {/* Profile Header */}
+      {/* Nagłówek profilu - avatar i podstawowe dane */}
       <div className="card">
         <div style={{
           display: 'flex',
@@ -210,7 +214,7 @@ export default function Profile() {
         </div>
       </div>
 
-      {/* Quick Actions */}
+      {/* Szybkie akcje - skróty do najważniejszych widoków */}
       <div className="card">
         <h3 style={{ margin: '0 0 16px 0', fontSize: '18px' }}>🚀 Szybkie akcje</h3>
 
@@ -263,7 +267,7 @@ export default function Profile() {
         </div>
       </div>
 
-      {/* Account Settings */}
+      {/* Ustawienia konta - informacje i wylogowanie */}
       <div className="card">
         <h3 style={{ margin: '0 0 16px 0', fontSize: '18px' }}>⚙️ Ustawienia konta</h3>
 

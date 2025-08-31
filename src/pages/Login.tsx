@@ -1,3 +1,4 @@
+// Logowanie - prosty formularz z kontami demo i przekierowaniem po sukcesie
 import { useState } from 'react'
 import { login } from '../api/dummyjson'
 import { useAuth } from '../store/auth'
@@ -13,6 +14,7 @@ export default function Login() {
   const nav = useNavigate()
   const loc = useLocation() as any
 
+  // Obsługa logowania: wywołaj API, zapisz stan w store i wróć na poprzednią stronę
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault()
     setError(null)
@@ -35,6 +37,7 @@ export default function Login() {
     }
   }
 
+  // Wygodne „konta demo” do testów bez przepisywania danych
   const demoUsers = [
     { username: 'emilys', password: 'emilyspass', name: 'Emily Johnson' },
     { username: 'michaelw', password: 'michaelwpass', name: 'Michael Williams' },

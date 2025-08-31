@@ -1,3 +1,4 @@
+// Prosty hook śledzący status połączenia (online/offline)
 import { useEffect, useState } from 'react'
 
 export function useOnline() {
@@ -5,9 +6,11 @@ export function useOnline() {
     useEffect(() => {
         const on = () => setOnline(true)
         const off = () => setOnline(false)
+        // Nasłuchuj zmian statusu przeglądarki
         window.addEventListener('online', on)
         window.addEventListener('offline', off)
         return () => {
+            // Porządki – zdejmij nasłuchiwacze przy odmontowaniu
             window.removeEventListener('online', on)
             window.removeEventListener('offline', off)
         }

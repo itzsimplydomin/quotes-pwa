@@ -4,28 +4,28 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     
-    <!-- Performance optimizations -->
+    <!-- Optymalizacje wydajności -->
     <meta name="theme-color" content="#0b1021" />
     <meta name="color-scheme" content="dark light" />
     
-    <!-- Preconnect to external domains -->
+    <!-- Wczesne połączenia (preconnect) do zewnętrznych domen -->
     <link rel="preconnect" href="https://dummyjson.com" />
     <link rel="dns-prefetch" href="https://dummyjson.com" />
     <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     
-    <!-- Note: Vite extracts and hashes CSS at build. Avoid preloading source CSS to prevent 404s and wasted work. -->
+    <!-- Uwaga: Vite wyciąga i hashuje CSS w czasie buildu. Nie preloadujemy źródłowego CSS, żeby uniknąć 404 i zbędnej pracy. -->
     
-    <!-- App metadata -->
+    <!-- Metadane aplikacji -->
     <title>Quotes – PWA</title>
     <meta name="description" content="Codzienne cytaty i inspiracje w interfejsie PWA" />
     
-    <!-- PWA icons -->
+    <!-- Ikony PWA -->
     <link rel="icon" type="image/png" sizes="192x192" href="/icons/icon-192.png" />
     <link rel="icon" type="image/png" sizes="512x512" href="/icons/icon-512.png" />
     <link rel="apple-touch-icon" href="/icons/icon-192.png" />
     
-    <!-- Preload critical fonts -->
+    <!-- Krytyczne style i podstawowe zmienne kolorów -->
     <style>
       /* Critical CSS - inline najważniejsze style */
       :root {
@@ -74,9 +74,9 @@
     </style>
   </head>
   <body>
-    <!-- App root -->
+    <!-- Główny kontener aplikacji -->
     <div id="root">
-      <!-- Fallback loading state -->
+      <!-- Zapasowy stan ładowania (gdy JS jeszcze się wczytuje) -->
       <div style="
         display: flex;
         align-items: center;
@@ -98,10 +98,10 @@
       </div>
     </div>
     
-    <!-- Main app script -->
+    <!-- Główny skrypt aplikacji -->
     <script type="module" src="./src/main.tsx"></script>
     
-    <!-- Critical resource hints -->
+    <!-- Wskazówki dot. ładowania zasobów i proste metryki -->
     <script>
       // Preload critical resources
       if ('requestIdleCallback' in window) {

@@ -1,3 +1,4 @@
+// Pasek statusu offline/online 
 import { useOnline } from '../hooks/useOnline'
 import { useState, useEffect } from 'react'
 
@@ -6,13 +7,15 @@ export default function OfflineBanner() {
   const [show, setShow] = useState(false)
   const [justWentOffline, setJustWentOffline] = useState(false)
 
+  // Gdy przechodzimy offline 
+  // gdy wracamy online 
   useEffect(() => {
     if (!online) {
       setShow(true)
       setJustWentOffline(true)
       setTimeout(() => setJustWentOffline(false), 3000)
     } else {
-      // Delay hiding when going online to show "back online" message
+      // Opóźnij ukrycie, aby pokazać komunikat „wrócono do sieci”
       if (show) {
         setTimeout(() => setShow(false), 2000)
       }

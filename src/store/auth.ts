@@ -1,3 +1,5 @@
+// Store autoryzacji (Zustand) - token i podstawowe dane użytkownika
+// Używa persist do zapisu w storage oraz rehydratacji po odświeżeniu strony
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 import { useFavs } from './favs'
