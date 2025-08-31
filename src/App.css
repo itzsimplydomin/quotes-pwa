@@ -1,8 +1,3 @@
-/*
-  Główne zmienne i tokeny projektu
-  Kolory, cienie i promienie zaokrągleń – jeden punkt prawdy dla styli.
-  Dzięki temu łatwo zmienić klimat aplikacji i zachować spójność.
-*/
 :root {
   color-scheme: light dark;
   --bg: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);
@@ -44,7 +39,6 @@ body,
 body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'SF Pro Display', 'Helvetica Neue', Arial, sans-serif;
   background: var(--bg);
-  /* Fixed backgrounds are costly on mobile; use scroll by default */
   background-attachment: scroll;
   color: var(--fg);
   line-height: 1.6;
@@ -53,7 +47,6 @@ body {
   overflow-x: hidden;
 }
 
-/* Styl paska przewijania */
 ::-webkit-scrollbar {
   width: 6px;
 }
@@ -71,7 +64,6 @@ body {
   background: var(--accent);
 }
 
-/* Nawigacja */
 nav {
   position: sticky;
   top: 0;
@@ -127,7 +119,6 @@ nav a.active::before {
   z-index: -1;
 }
 
-/* Kontener główny */
 .container {
   max-width: 1200px;
   margin: 0 auto;
@@ -135,7 +126,6 @@ nav a.active::before {
   width: 100%;
 }
 
-/* Cards */
 .card {
   position: relative;
   background: var(--surface);
@@ -164,14 +154,12 @@ nav a.active::before {
   border-color: rgba(59, 130, 246, 0.3);
 }
 
-/* Grid layout */
 .row {
   display: grid;
   gap: 16px;
   align-items: stretch;
 }
 
-/* Responsive grid */
 @media (min-width: 640px) {
   .row {
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -184,7 +172,6 @@ nav a.active::before {
   }
 }
 
-/* Form controls row */
 .row.form-controls {
   grid-template-columns: 1fr auto;
   align-items: center;
@@ -198,7 +185,6 @@ nav a.active::before {
   }
 }
 
-/* Buttons */
 button {
   position: relative;
   background: linear-gradient(135deg, var(--accent), var(--accent-hover));
@@ -252,12 +238,10 @@ button.secondary:hover {
   box-shadow: var(--shadow-lg);
 }
 
-/* Danger button */
 button.danger {
   background: linear-gradient(135deg, var(--danger), #dc2626);
 }
 
-/* Input fields */
 input,
 select,
 textarea {
@@ -285,7 +269,6 @@ input::placeholder {
   color: var(--muted);
 }
 
-/* Range slider */
 input[type="range"] {
   width: 120px;
   padding: 0;
@@ -326,7 +309,6 @@ input[type="range"]::-moz-range-thumb {
   box-shadow: var(--shadow-md);
 }
 
-/* Typography */
 h1, h2, h3, h4, h5, h6 {
   margin: 0 0 16px 0;
   font-weight: 700;
@@ -368,7 +350,6 @@ h2 {
   font-weight: 500;
 }
 
-/* Links */
 a {
   color: var(--accent);
   text-decoration: none;
@@ -379,7 +360,6 @@ a:hover {
   color: var(--accent-hover);
 }
 
-/* Labels */
 label {
   display: flex;
   flex-direction: column;
@@ -394,7 +374,6 @@ label.inline {
   gap: 12px;
 }
 
-/* Code */
 code {
   background: var(--glass);
   padding: 2px 6px;
@@ -404,7 +383,6 @@ code {
   border: 1px solid var(--glass-border);
 }
 
-/* Horizontal rule */
 hr {
   border: none;
   height: 1px;
@@ -412,7 +390,6 @@ hr {
   margin: 24px 0;
 }
 
-/* Animations */
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -441,16 +418,12 @@ hr {
   animation: slideIn 0.6s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Special components */
-
-/* Profile image */
 img[width="64"] {
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-md);
   border: 2px solid var(--glass-border);
 }
 
-/* Quote cards in grid */
 .card .card {
   background: var(--glass);
   backdrop-filter: var(--blur);
@@ -464,7 +437,6 @@ img[width="64"] {
   transform: translateY(-4px) scale(1.02);
 }
 
-/* Update prompt styling */
 div[style*="position:fixed"][style*="bottom:16px"] {
   background: var(--surface) !important;
   backdrop-filter: var(--blur) !important;
@@ -474,7 +446,6 @@ div[style*="position:fixed"][style*="bottom:16px"] {
   color: var(--fg) !important;
 }
 
-/* Offline banner styling */
 div[style*="position:fixed"][style*="top:0"] {
   background: linear-gradient(135deg, var(--warning), #f59e0b) !important;
   backdrop-filter: var(--blur) !important;
@@ -483,7 +454,6 @@ div[style*="position:fixed"][style*="top:0"] {
   box-shadow: var(--shadow-lg) !important;
 }
 
-/* Mobile optimizations */
 @media (max-width: 768px) {
   .container {
     padding: 16px;
@@ -515,11 +485,10 @@ div[style*="position:fixed"][style*="top:0"] {
   
   input, select, textarea {
     padding: 10px 14px;
-    font-size: 16px; /* Prevents zoom on iOS */
+    font-size: 16px; 
   }
 }
 
-/* Tablet optimizations */
 @media (min-width: 768px) and (max-width: 1024px) {
   .container {
     max-width: 100%;
@@ -532,12 +501,10 @@ div[style*="position:fixed"][style*="top:0"] {
   }
 }
 
-/* Large screen optimizations */
 @media (min-width: 1200px) {
   .container {
     padding: 40px 32px;
   }
-  /* Re-enable fixed background on larger screens */
   body {
     background-attachment: fixed;
   }
@@ -551,7 +518,6 @@ div[style*="position:fixed"][style*="top:0"] {
   }
 }
 
-/* Dark mode enhancements */
 @media (prefers-color-scheme: light) {
   :root {
     --bg: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 50%, #cbd5e1 100%);
@@ -569,7 +535,6 @@ div[style*="position:fixed"][style*="top:0"] {
   }
 }
 
-/* Accessibility improvements */
 @media (prefers-reduced-motion: reduce) {
   * {
     animation-duration: 0.01ms !important;
@@ -578,7 +543,6 @@ div[style*="position:fixed"][style*="top:0"] {
   }
 }
 
-/* Focus improvements */
 button:focus-visible,
 input:focus-visible,
 select:focus-visible,
@@ -588,7 +552,6 @@ a:focus-visible {
   outline-offset: 2px;
 }
 
-/* Print styles */
 @media print {
   body {
     background: white;

@@ -1,69 +1,81 @@
-# React + TypeScript + Vite
+﻿# Quotes PWA
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Lekka aplikacja React (Vite + TypeScript) prezentująca cytaty z możliwością przeglądania, wyszukiwania/eksploracji, dodawania do ulubionych, logowania demonstracyjnego oraz pracy w trybie offline jako PWA.
 
-Currently, two official plugins are available:
+## Funkcje
+- Przeglądanie cytatów: lista cytatów i widok eksploracji.
+- Ulubione: zapisywanie i usuwanie ulubionych cytatów (lokalnie, trwałość w localStorage).
+- Logowanie demo: prosty stan autoryzacji przechowywany po stronie klienta (brak prawdziwego backendu).
+- Ochrona tras: komponent Protected blokuje dostęp do prywatnych podstron bez zalogowania.
+- PWA: rejestracja Service Workera, działanie offline, możliwość instalacji na urządzeniu, baner Offline oraz komponent UpdatePrompt informujący o aktualizacjach.
+- Powiadomienie o trybie offline: OfflineBanner pokazuje status połączenia.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Stos technologiczny
+- Vite + React + TypeScript
+- React Router (nawigacja między stronami: Home, Explore, Favorites, Login, Profile, NotFound)
+- Prosty store na potrzeby autoryzacji i ulubionych (src/store/auth.ts, src/store/favs.ts) z trwałością w localStorage
+- PWA (Service Worker, manifest, komponent UpdatePrompt)
+- CSS (pliki src/App.css, src/index.css)
 
-## Expanding the ESLint configuration
+## Struktura (kluczowe pliki)
+- ite.config.ts — konfiguracja Vite (w tym konfiguracja PWA, jeśli włączona)
+- index.html — szablon aplikacji i osadzenie skryptu
+- src/main.tsx — punkt wejścia, rejestracja aplikacji
+- src/App.tsx — główny layout/routing
+- src/pages/Home.tsx — strona główna
+- src/pages/Explore.tsx — eksploracja/wyszukiwanie cytatów
+- src/pages/Favorites.tsx — ulubione cytaty
+- src/pages/Login.tsx — logowanie (demo)
+- src/pages/Profile.tsx — profil użytkownika
+- src/pages/NotFound.tsx — 404
+- src/components/Protected.tsx — ochrona tras prywatnych
+- src/components/OfflineBanner.tsx — informacja o trybie offline
+- src/pwa/UpdatePrompt.tsx — informowanie o nowej wersji aplikacji
+- src/api/dummyjson.ts — klient do API cytatów (DummyJSON)
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## API
+- Źródło danych: DummyJSON (np. endpointy w stylu https://dummyjson.com/quotes).
+- Warstwa API jest enkapsulowana w src/api/dummyjson.ts.
 
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## Wymagania
+- Node.js 18+ (zalecane LTS)
+- Menedżer pakietów: npm / pnpm / yarn
 
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
+## Szybki start
+1. Zainstaluj zależności:
+   - 
+pm install
+2. Uruchom tryb deweloperski:
+   - 
+pm run dev
+3. Budowa produkcyjna:
+   - 
+pm run build
+4. Podgląd buildu (serwer statyczny Vite):
+   - 
+pm run preview
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+## PWA i aktualizacje
+- Aplikacja rejestruje Service Workera po zbudowaniu (tryb produkcyjny).
+- UpdatePrompt informuje, gdy dostępna jest nowa wersja; użytkownik może odświeżyć, aby ją zastosować.
+- OfflineBanner prezentuje brak połączenia i tryb offline.
+- W środowisku deweloperskim SW może być wyłączony; pełne działanie PWA sprawdzisz po 
+pm run build + 
+pm run preview.
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Trwałość danych
+- Ulubione oraz stan logowania są przechowywane lokalnie (np. localStorage). Usunięcie danych przeglądarki zresetuje stan.
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## Deploy
+- Hosting statyczny (Vercel, Netlify, GitHub Pages, dowolny serwer CDN).
+- Zalecany HTTPS (wymagany przez część funkcji PWA).
+- Po wdrożeniu pamiętaj o odświeżeniu Service Workera po aktualizacjach (komponent UpdatePrompt może w tym pomóc).
 
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+## Rozwiązywanie problemów
+- Zmiany nie pojawiają się po wdrożeniu: odśwież stronę „twardo” lub wyczyść cache Service Workera (DevTools → Application → Service Workers → Unregister/Update).
+- Problemy offline: uruchom build i preview (
+pm run build && npm run preview) — dopiero w tym trybie SW buforuje zasoby.
+- API DummyJSON zwraca błąd: sprawdź połączenie z internetem i ograniczenia CORS.
+
+## Licencja
+- Brak osobnej licencji — dostosuj według potrzeb projektu.
